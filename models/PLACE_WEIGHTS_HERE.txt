@@ -1,0 +1,2 @@
+Copy your trained file steel_residual_best.pth from the original SteelVision project folder into this directory.
+The uploaded Jupyter notebook does not include model weights. The server will not fabricate predictions without the actual trained file.
