@@ -101,6 +101,10 @@ Open:
 
 http://127.0.0.1:8000
 
+<img width="1440" height="1164" alt="Steel_Surface_Inspection_Preview" src="https://github.com/user-attachments/assets/48c83dfb-ed99-4364-a9e9-32cee4df9af0" />
+<img width="2541" height="1302" alt="Screenshot 2026-10-30 143133" src="https://github.com/user-attachments/assets/444f400c-003e-43e1-9051-d3fd1c37cb64" />
+
+
 ## Limitations
 
 - The model is trained to classify six known defect categories.
