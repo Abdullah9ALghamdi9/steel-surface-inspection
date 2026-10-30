@@ -1,38 +1,122 @@
 # Steel Surface Inspection
 
-A minimal **English-language web application** for classifying steel surface defects using the trained ResidualSteelCNN from `steel_defect.ipynb`. It keeps the original dark teal template, with only image upload and results: the detected defect, six relative class scores, and one short recommendation.
+### AI-Powered Steel Defect Classification System
 
-## Setup on Windows
+An end-to-end Deep Learning project designed to automatically classify surface defects in steel using Convolutional Neural Networks (CNNs).
 
-1. Copy your own trained `steel_residual_best.pth` file into `models/steel_residual_best.pth`. This file is **not included**. It must come from your Jupyter training run (not the notebook itself).
-2. Open a terminal in this `steelvision_app` directory and run:
+The system integrates a trained PyTorch model with a FastAPI backend and a modern web interface, allowing users to upload steel surface images and receive classification results and inspection recommendations.
 
-```powershell
-py -3.13 -m pip install -r requirements.txt
-py -3.13 -m uvicorn main:app --reload
+## Project Overview
+
+Steel surface defects can affect product quality and manufacturing efficiency. Manual inspection can be time-consuming and inconsistent.
+
+This project explores how Deep Learning can support automated industrial quality inspection by identifying six types of steel surface defects.
+
+## Dataset
+
+**Dataset:** NEU Surface Defect Database (NEU-CLS)
+
+- 1,800 original grayscale images
+- 1,799 images after removing one exact duplicate
+- 6 defect categories
+- Image resolution: 200 × 200 pixels
+- Nearly balanced class distribution
+
+### Defect Categories
+
+1. Crazing (Cr)
+2. Inclusion (In)
+3. Pitted Surface (PS)
+4. Patches (Pa)
+5. Rolled-in Scale (RS)
+6. Scratches (Sc)
+
+## Deep Learning Models
+
+Three CNN architectures were developed and compared:
+
+- **Model 1: Baseline CNN** — A simple convolutional neural network.
+- **Model 2: Improved CNN** — A CNN using Batch Normalization and Dropout.
+- **Model 3: Residual CNN** — A deeper CNN incorporating residual connections.
+
+## Model Performance
+
+| Model | Validation Macro F1 |
+|---|---:|
+| Baseline CNN | 53.69% |
+| Improved CNN | 94.40% |
+| Residual CNN | 97.77% |
+
+### Final Test Results
+
+The selected Residual CNN achieved:
+
+- **Test Accuracy:** 100%
+- **Test Macro F1:** 100%
+- **Correct Predictions:** 180/180
+
+These results were obtained on the NEU-CLS held-out test split. Performance on new industrial images may differ, and further testing is necessary before real-world deployment.
+
+## Web Application
+
+The web application allows users to:
+
+- Upload steel surface images.
+- Automatically classify the detected defect type.
+- View prediction scores across six defect categories.
+- Receive a brief inspection recommendation.
+
+The system uses **FastAPI** to connect the PyTorch model to the web interface.
+
+## Technologies Used
+
+- Python
+- PyTorch
+- Torchvision
+- NumPy
+- Pandas
+- Scikit-learn
+- Matplotlib
+- FastAPI
+- HTML, CSS, JavaScript
+- Jupyter Notebook
+
+## Running the Application
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
 ```
 
-3. Open **http://127.0.0.1:8000**. Choose or drag a photo. Analysis begins automatically—no questions or submit button.
-4. To stop the server, press `Ctrl+C` in the terminal. With `--reload`, edited frontend files appear after a browser refresh (`Ctrl+F5` if cached).
+Place the trained model weights (`steel_residual_best.pth`) in the application's `models` directory.
 
-## Files
+Start the FastAPI server from the application directory:
 
-- `main.py`: FastAPI server, upload validation, short per-class recommendations.
-- `model.py`: trained CNN architecture and image preprocessing as used in the notebook (grayscale, 128 × 128).
-- `static/index.html`, `static/style.css`, `static/app.js`: English frontend and automatic upload workflow.
-- `models/`: location for **your** model weights.
+```bash
+python -m uvicorn main:app --reload
+```
 
-## What scores mean
+Open:
 
-- Classification covers **six defect types**: Crazing, Inclusion, Pitted Surface, Patches, Rolled-in Scale and Scratches.
-- The six displayed percentages are **Softmax class scores** (relative model output). They are **not percentages of surface area, damage severity, or certified probabilities**.
-- The brief recommendation is fixed guidance tied to the predicted type. **There is no image-based severity assessment** because NEU-CLS does not have severity labels, damage measurements, or a no-defect class.
-- The CNN may label intact or unrelated photos as one of the six defects. Human review is necessary for quality and safety decisions. Real-factory performance has not been established.
+http://127.0.0.1:8000
 
-## API
+## Limitations
 
-- `GET /api/health`: server-side model readiness.
-- `POST /api/inspect`: accepts only one multipart field: `file`. Returns English defect name, six class scores and a recommendation.
-- `GET /docs`: Swagger docs for developers (not shown to the end user).
+- The model is trained to classify six known defect categories.
+- It does not independently verify whether a steel surface is defect-free.
+- The dataset does not provide ground-truth defect severity labels.
+- Prediction scores do not represent actual defect size or severity.
+- Further testing on independent industrial data is required.
 
-No retraining or new dataset downloads are needed for this UI update. The model file remains essential.
+## Future Improvements
+
+- Expand the training dataset.
+- Add defect localization using object detection.
+- Develop severity assessment using appropriately labeled data.
+- Improve performance on real-world industrial images.
+- Deploy the application online.
+
+## Project Goal
+
+This project was developed primarily for educational purposes to strengthen practical skills in Deep Learning
